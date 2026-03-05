@@ -5,8 +5,8 @@ import { PhantomWalletAdapter, SolflareWalletAdapter } from '@solana/wallet-adap
 import { WalletModalProvider, WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { clusterApiUrl, Connection } from '@solana/web3.js';
 import { motion, AnimatePresence } from 'motion/react';
-import { TrendingUp, ShieldAlert, Users, Wallet, ExternalLink, Menu, X, ChevronRight, Activity, Zap } from 'lucide-react';
-import { fetchTreasuryBalance, fetchTokenPrice, RPC_ENDPOINT } from './services/solana';
+import { TrendingUp, ShieldAlert, Users, Wallet, ExternalLink, Menu, X, ChevronRight, Activity, Zap, Pizza, Triangle, Quote } from 'lucide-react';
+import { getTreasuryBalance, getTokenPrice, RPC_ENDPOINT } from './services/solana';
 
 // Default styles for wallet adapter
 import '@solana/wallet-adapter-react-ui/styles.css';
@@ -21,157 +21,201 @@ const Dashboard = () => {
   useEffect(() => {
     const loadData = async () => {
       const [b, p] = await Promise.all([
-        fetchTreasuryBalance(connection),
-        fetchTokenPrice()
+        getTreasuryBalance(connection),
+        getTokenPrice()
       ]);
       setBalance(b);
       setPrice(p);
       setLoading(false);
     };
     loadData();
-    const interval = setInterval(loadData, 30000); // Refresh every 30s
+    const interval = setInterval(loadData, 30000);
     return () => clearInterval(interval);
   }, [connection]);
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A] text-white selection:bg-neon-green selection:text-black">
-      {/* Header */}
-      <nav className="border-b border-white/10 px-6 py-4 flex justify-between items-center sticky top-0 bg-black/80 backdrop-blur-md z-50">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-neon-green flex items-center justify-center">
-            <span className="text-black font-bold text-xl">F</span>
-          </div>
-          <span className="font-mono font-bold tracking-tighter text-xl uppercase">Freira DAO</span>
-        </div>
+    <div className="min-h-screen bg-habit text-sand selection:bg-crust selection:text-habit">
+      {/* Navigation */}
+      <nav className="px-8 py-6 flex justify-between items-center border-b border-sand/10">
         <div className="flex items-center gap-4">
+          <div className="w-10 h-10 rounded-full bg-crust flex items-center justify-center shadow-lg shadow-crust/20">
+            <Triangle className="w-5 h-5 text-habit fill-current" />
+          </div>
+          <span className="text-serif text-2xl font-bold tracking-tight italic">Freira DAO</span>
+        </div>
+        <div className="flex items-center gap-6">
+          <div className="hidden md:flex gap-8 text-xs uppercase tracking-[0.2em] font-medium text-sand/60">
+            <a href="#" className="hover:text-crust transition-colors">Tesouro</a>
+            <a href="#" className="hover:text-crust transition-colors">Calls</a>
+            <a href="#" className="hover:text-crust transition-colors">Esfiha-Meter</a>
+          </div>
           <WalletMultiButton />
         </div>
       </nav>
 
-      <main className="max-w-7xl mx-auto px-6 py-12">
-        {/* Hero Section */}
-        <section className="grid lg:grid-cols-2 gap-12 items-center mb-24">
-          <motion.div 
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-neon-green/10 border border-neon-green/20 text-neon-green text-xs font-mono mb-6">
-              <Activity className="w-3 h-3 animate-pulse" />
-              LIVE ON SOLANA MAINNET
-            </div>
-            <h1 className="text-6xl lg:text-8xl font-bold tracking-tighter mb-8 leading-[0.9]">
-              A PIRÂMIDE <br />
-              <span className="text-neon-green italic">PERFEITA.</span>
-            </h1>
-            <p className="text-xl text-white/60 max-w-lg mb-10 font-light leading-relaxed">
-              Somos um grupo de investidores cripto em busca da pirâmide perfeita, 
-              enganar os trouxas e sair com o máximo de lucro seguindo as calls do nosso grande líder <span className="text-white font-medium underline decoration-neon-green">Freira</span>!
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <button className="px-8 py-4 bg-white text-black font-bold uppercase tracking-widest hover:bg-neon-green transition-colors flex items-center gap-2 group">
-                Comprar Token
-                <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </button>
-              <button className="px-8 py-4 border border-white/20 font-bold uppercase tracking-widest hover:bg-white/5 transition-colors">
-                Whitepaper
-              </button>
-            </div>
-          </motion.div>
-
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative"
-          >
-            <div className="aspect-square bg-gradient-to-br from-neon-green/20 to-transparent border border-white/10 p-8 flex flex-col justify-between relative overflow-hidden group">
-              <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-30 transition-opacity">
-                <Zap className="w-64 h-64 text-neon-green" />
-              </div>
-              
-              <div className="relative z-10">
-                <div className="text-xs font-mono text-white/40 uppercase mb-2">Risco Calculado</div>
-                <div className="flex items-center gap-4 p-4 bg-black/50 border border-white/10 backdrop-blur-sm">
-                  <ShieldAlert className="w-8 h-8 text-neon-pink" />
-                  <div>
-                    <div className="font-bold text-lg">ALERTA DE ESFIHA</div>
-                    <div className="text-sm text-white/50">O risco de ter o esfiha no grupo é real.</div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="relative z-10 grid grid-cols-2 gap-4">
-                <div className="p-4 bg-white/5 border border-white/10">
-                  <div className="text-xs font-mono text-white/40 uppercase mb-1">Token Price</div>
-                  <div className="text-3xl font-bold font-mono text-neon-green">
-                    ${loading ? "---" : price}
-                  </div>
-                </div>
-                <div className="p-4 bg-white/5 border border-white/10">
-                  <div className="text-xs font-mono text-white/40 uppercase mb-1">Treasury</div>
-                  <div className="text-3xl font-bold font-mono">
-                    {loading ? "---" : balance?.toFixed(2)} SOL
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </section>
-
-        {/* Stats Grid */}
-        <section className="grid md:grid-cols-3 gap-6 mb-24">
-          {[
-            { label: "Membros Ativos", value: "420", icon: Users, color: "text-blue-400" },
-            { label: "Volume 24h", value: "$1.2M", icon: TrendingUp, color: "text-neon-green" },
-            { label: "Total Locked", value: "$69,420", icon: Wallet, color: "text-neon-pink" },
-          ].map((stat, i) => (
-            <motion.div
-              key={i}
+      <main>
+        {/* Hero Section - Editorial Style */}
+        <section className="relative px-8 py-20 lg:py-32 overflow-hidden">
+          <div className="max-w-7xl mx-auto grid lg:grid-cols-12 gap-16 items-center">
+            <motion.div 
+              className="lg:col-span-7 z-10"
               initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
-              className="p-8 border border-white/10 bg-white/[0.02] hover:bg-white/[0.05] transition-colors group"
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
             >
-              <stat.icon className={`w-8 h-8 ${stat.color} mb-6`} />
-              <div className="text-xs font-mono text-white/40 uppercase mb-2 tracking-widest">{stat.label}</div>
-              <div className="text-4xl font-bold tracking-tighter group-hover:text-neon-green transition-colors">{stat.value}</div>
+              <div className="inline-block px-4 py-1 border border-crust/30 rounded-full text-[10px] uppercase tracking-[0.3em] text-crust mb-8 font-bold">
+                A Pirâmide Perfeita
+              </div>
+              <h1 className="text-serif text-7xl lg:text-9xl font-bold leading-[0.85] mb-10 tracking-tighter">
+                Siga a <br />
+                <span className="italic text-crust">Freira.</span>
+              </h1>
+              <p className="text-serif text-2xl lg:text-3xl leading-relaxed text-sand/80 max-w-2xl mb-12 italic">
+                "Em busca da pirâmide perfeita, enganando os trouxas e saindo com o máximo de lucro."
+              </p>
+              
+              <div className="flex flex-wrap gap-6">
+                <button className="px-10 py-5 bg-crust text-habit font-bold uppercase tracking-widest rounded-full hover:bg-sand transition-all flex items-center gap-3 shadow-xl shadow-crust/20">
+                  Entrar na Pirâmide
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+                <div className="flex items-center gap-4 px-6 py-4 border border-sand/20 rounded-full backdrop-blur-sm">
+                  <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                  <span className="text-xs uppercase tracking-widest font-bold">Líder Online</span>
+                </div>
+              </div>
             </motion.div>
-          ))}
+
+            <motion.div 
+              className="lg:col-span-6 relative"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1, delay: 0.2 }}
+            >
+              {/* Image Frame inspired by the reference */}
+              <div className="relative aspect-square rounded-[2rem] overflow-hidden border-[12px] border-sand/5 shadow-2xl">
+                <img 
+                  src="https://i.ibb.co/fYM1w23T/PDF-square-Gemini-Generated-Image-epdkyzepdkyzepdk.png" 
+                  alt="A Freira e a Pirâmide de Esfihas"
+                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                  referrerPolicy="no-referrer"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-habit/60 via-transparent to-transparent" />
+                
+                {/* Overlay Badge */}
+                <div className="absolute bottom-8 left-8 right-8 p-6 bg-sand/10 backdrop-blur-md border border-sand/20 rounded-2xl">
+                  <div className="flex items-center gap-4 mb-3">
+                    <ShieldAlert className="w-6 h-6 text-crust" />
+                    <span className="text-xs uppercase tracking-widest font-bold text-crust">Risco Calculado</span>
+                  </div>
+                  <p className="text-sm italic text-sand/90">
+                    "Ter o esfiha no grupo é o preço da glória."
+                  </p>
+                </div>
+              </div>
+
+              {/* Decorative Elements */}
+              <div className="absolute -top-10 -right-10 w-32 h-32 border border-crust/20 rounded-full animate-spin-slow" />
+              <div className="absolute -bottom-6 -left-6 w-24 h-24 bg-crust/10 rounded-full blur-2xl" />
+            </motion.div>
+          </div>
         </section>
 
-        {/* Call to Action */}
-        <section className="border border-neon-green p-12 text-center relative overflow-hidden">
-          <div className="absolute inset-0 bg-neon-green/5 pointer-events-none" />
-          <h2 className="text-4xl font-bold mb-6 tracking-tighter">PRONTO PARA O PRÓXIMO RUG?</h2>
-          <p className="text-white/60 mb-8 max-w-xl mx-auto">
-            Junte-se ao exército do Freira e vamos dominar a Solana. 
-            Não garantimos lucros, mas garantimos risadas (especialmente quando o Esfiha for liquidado).
-          </p>
-          <div className="flex justify-center gap-4">
-            <button className="px-10 py-5 bg-neon-green text-black font-bold uppercase tracking-widest hover:bg-white transition-all">
-              Entrar no Discord
-            </button>
+        {/* Stats Section - Clean & Minimal */}
+        <section className="px-8 py-24 bg-sand/5">
+          <div className="max-w-7xl mx-auto">
+            <div className="grid md:grid-cols-4 gap-12">
+              <div className="space-y-2">
+                <div className="text-[10px] uppercase tracking-[0.3em] text-crust font-bold">Preço do Token</div>
+                <div className="text-5xl font-serif italic">{loading ? "..." : `$${price}`}</div>
+              </div>
+              <div className="space-y-2">
+                <div className="text-[10px] uppercase tracking-[0.3em] text-crust font-bold">Tesouro DAO</div>
+                <div className="text-5xl font-serif italic">{loading ? "..." : `${balance?.toFixed(2)} SOL`}</div>
+              </div>
+              <div className="space-y-2">
+                <div className="text-[10px] uppercase tracking-[0.3em] text-crust font-bold">Vítimas Atuais</div>
+                <div className="text-5xl font-serif italic">1,420</div>
+              </div>
+              <div className="space-y-2">
+                <div className="text-[10px] uppercase tracking-[0.3em] text-crust font-bold">Esfihas Comidas</div>
+                <div className="text-5xl font-serif italic">∞</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Quote Section */}
+        <section className="px-8 py-32 text-center max-w-4xl mx-auto">
+          <Quote className="w-12 h-12 text-crust/30 mx-auto mb-10" />
+          <h2 className="text-serif text-4xl lg:text-6xl italic leading-tight mb-12">
+            "Não somos apenas um grupo, somos uma religião. E nossa hóstia é a esfiha de carne com tempero duvidoso."
+          </h2>
+          <div className="flex items-center justify-center gap-4">
+            <div className="w-12 h-[1px] bg-crust/30" />
+            <span className="text-xs uppercase tracking-[0.4em] font-bold">O Grande Líder Freira</span>
+            <div className="w-12 h-[1px] bg-crust/30" />
+          </div>
+        </section>
+
+        {/* Grid of Features inspired by the "Market" feel of the image */}
+        <section className="px-8 py-24 border-t border-sand/10">
+          <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-16">
+            <div className="space-y-6">
+              <div className="w-12 h-12 border border-crust/30 flex items-center justify-center rounded-lg">
+                <Pizza className="w-6 h-6 text-crust" />
+              </div>
+              <h3 className="text-serif text-3xl italic">Calls de Elite</h3>
+              <p className="text-sand/60 leading-relaxed">
+                Receba as melhores calls diretamente do convento. Se a Freira falou, o rug é certo (ou não).
+              </p>
+            </div>
+            <div className="space-y-6">
+              <div className="w-12 h-12 border border-crust/30 flex items-center justify-center rounded-lg">
+                <Triangle className="w-6 h-6 text-crust" />
+              </div>
+              <h3 className="text-serif text-3xl italic">Arquitetura Piramidal</h3>
+              <p className="text-sand/60 leading-relaxed">
+                Nossa estrutura foi desenhada pelos mesmos engenheiros das pirâmides do Egito. Sólida como pão amanhecido.
+              </p>
+            </div>
+            <div className="space-y-6">
+              <div className="w-12 h-12 border border-crust/30 flex items-center justify-center rounded-lg">
+                <ShieldAlert className="w-6 h-6 text-crust" />
+              </div>
+              <h3 className="text-serif text-3xl italic">Segurança Esfiha</h3>
+              <p className="text-sand/60 leading-relaxed">
+                Monitoramento constante do Esfiha. Se ele entrar em uma trade, nós saímos. Simples assim.
+              </p>
+            </div>
           </div>
         </section>
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-white/10 px-6 py-12 mt-24">
-        <div className="max-w-7xl mx-auto flex flex-col md:row justify-between items-center gap-8">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 bg-white flex items-center justify-center">
-              <span className="text-black font-bold text-sm">F</span>
-            </div>
-            <span className="font-mono font-bold tracking-tighter uppercase text-sm">Freira DAO © 2024</span>
+      <footer className="px-8 py-20 border-t border-sand/10">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
+          <div className="text-serif text-3xl italic font-bold">Freira DAO</div>
+          <div className="flex gap-12 text-[10px] uppercase tracking-[0.3em] font-bold text-sand/40">
+            <a href="#" className="hover:text-crust transition-colors">Twitter</a>
+            <a href="#" className="hover:text-crust transition-colors">Telegram</a>
+            <a href="#" className="hover:text-crust transition-colors">Solscan</a>
           </div>
-          <div className="flex gap-8 text-xs font-mono text-white/40 uppercase tracking-widest">
-            <a href="#" className="hover:text-neon-green">Twitter</a>
-            <a href="#" className="hover:text-neon-green">Telegram</a>
-            <a href="#" className="hover:text-neon-green">DexScreener</a>
+          <div className="text-[10px] uppercase tracking-[0.2em] text-sand/30">
+            © 2024 - A Pirâmide que nunca dorme
           </div>
         </div>
       </footer>
+
+      <style dangerouslySetInnerHTML={{ __html: `
+        @keyframes spin-slow {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        .animate-spin-slow {
+          animation: spin-slow 20s linear infinite;
+        }
+      `}} />
     </div>
   );
 };

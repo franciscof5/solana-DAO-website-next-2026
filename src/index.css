@@ -1,29 +1,33 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@300;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,700;1,400&family=Space+Grotesk:wght@300;500;700&display=swap');
 @import "tailwindcss";
 
 @theme {
   --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
-  --color-neon-green: #00FF00;
-  --color-neon-pink: #FF00FF;
-  --color-dark-bg: #0A0A0A;
+  --font-serif: "Cormorant Garamond", serif;
+  --color-sand: #F5F2ED;
+  --color-crust: #D97706;
+  --color-habit: #1A1A1A;
+  --color-stone: #A8A29E;
 }
 
 @layer base {
   body {
-    @apply bg-dark-bg text-white font-sans;
+    @apply bg-habit text-sand font-sans;
   }
 }
 
-/* Solana Wallet Adapter Overrides */
+/* Custom Utilities */
+.text-serif { font-family: var(--font-serif); }
+
+/* Solana Wallet Adapter Overrides - Warm Theme */
 .wallet-adapter-button {
-  @apply !bg-neon-green !text-black !font-bold !rounded-none !transition-all hover:!bg-white !px-6 !h-10 !text-sm !uppercase !tracking-widest;
+  @apply !bg-crust !text-habit !font-bold !rounded-full !transition-all hover:!bg-sand !px-6 !h-10 !text-sm !uppercase !tracking-widest;
 }
 
 .wallet-adapter-dropdown-list {
-  @apply !bg-black !border !border-neon-green !rounded-none;
+  @apply !bg-habit !border !border-crust/30 !rounded-xl;
 }
 
 .wallet-adapter-dropdown-list-item {
-  @apply !text-white hover:!bg-neon-green hover:!text-black;
+  @apply !text-sand hover:!bg-crust hover:!text-habit;
 }

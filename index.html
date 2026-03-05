@@ -3,7 +3,28 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Google AI Studio App</title>
+    <title>Freira DAO - A Pirâmide Perfeita</title>
+    <script>
+      // Fix for "TypeError: setting getter-only property 'fetch'"
+      // Some libraries try to polyfill fetch even if it exists.
+      // We try to make it non-writable if it's already there to prevent errors,
+      // or at least catch the assignment if possible.
+      (function() {
+        try {
+          const nativeFetch = window.fetch;
+          if (nativeFetch) {
+            Object.defineProperty(window, 'fetch', {
+              configurable: true,
+              enumerable: true,
+              get: function() { return nativeFetch; },
+              set: function() { console.warn('Something tried to overwrite fetch'); }
+            });
+          }
+        } catch (e) {
+          console.error('Fetch polyfill fix failed', e);
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
